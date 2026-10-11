@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { LEVELS, pickSaucesForLevel } from '../levels';
+import { sauceSoundKey } from '../sounds';
 
 const SPAWN_INTERVAL_MS = 1200;
 const FLASH_DURATION_MS = 300;
@@ -103,7 +104,15 @@ export class GameScene extends Phaser.Scene {
     const name = sauce.text.text;
     sauce.text.destroy();
     this.flash(name);
+    this.playSauceSound(name);
     this.markCircle(this.levelSauces.indexOf(name));
+  }
+
+  private playSauceSound(name: string) {
+    const key = sauceSoundKey(name);
+    if (this.cache.audio.exists(key)) {
+      this.sound.play(key);
+    }
   }
 
   private markCircle(index: number) {
