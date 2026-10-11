@@ -1,9 +1,7 @@
 import Phaser from 'phaser';
-import { LEVEL_SAUCE_COUNTS, saucesForLevel } from '../levels';
+import { LEVELS, saucesForLevel } from '../levels';
 
 const SPAWN_INTERVAL_MS = 1200;
-const FALL_SPEED_MIN = 220;
-const FALL_SPEED_MAX = 220;
 const FLASH_DURATION_MS = 300;
 const SCORE_BAR_HEIGHT = 120;
 const SCORE_BAR_DEPTH = 100;
@@ -11,7 +9,7 @@ const TOP_BAR_HEIGHT = 100;
 const STARTING_LIVES = 3;
 const LEVEL_DURATION_MS = 60_000;
 
-type FallingSauce = { text: Phaser.GameObjects.Text; speed: number };
+type FallingSauce = { text: Phaser.GameObjects.Text };
 type CircleState = 'empty' | 'filled' | 'crossed';
 export type GameData = { level?: number };
 export type Outcome = 'complete' | 'timeUp' | 'outOfLives';
@@ -71,7 +69,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.sauces = this.sauces.filter((sauce) => {
-      sauce.text.y += sauce.speed * seconds;
+      sauce.text.y += LEVELS[this.level].fallSpeed * seconds;
       if (sauce.text.y - sauce.text.height > bottom) {
         sauce.text.destroy();
         return false;
@@ -90,10 +88,7 @@ export class GameScene extends Phaser.Scene {
     const halfWidth = text.width / 2;
     text.x = Phaser.Math.Between(halfWidth, Math.max(halfWidth, this.scale.width - halfWidth));
 
-    const sauce: FallingSauce = {
-      text,
-      speed: Phaser.Math.Between(FALL_SPEED_MIN, FALL_SPEED_MAX),
-    };
+    const sauce: FallingSauce = { text };
     this.sauces.push(sauce);
 
     text.setInteractive({ useHandCursor: true });
@@ -138,7 +133,7 @@ export class GameScene extends Phaser.Scene {
         score,
         total: this.levelSauces.length,
         level: this.level,
-        hasNextLevel: this.level + 1 < LEVEL_SAUCE_COUNTS.length,
+        hasNextLevel: this.level + 1 < LEVELS.length,
       });
     });
   }

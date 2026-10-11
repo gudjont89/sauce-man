@@ -13,9 +13,16 @@ export const SAUCES = [
   
 ];
 
-// Number of sauces (taken from the start of SAUCES) in each level.
-export const LEVEL_SAUCE_COUNTS = [8, 11];
+type Level = {
+  sauceCount: number; // taken from the start of SAUCES
+  fallSpeed: number; // pixels per second
+};
+
+export const LEVELS: Level[] = [
+  { sauceCount: 8, fallSpeed: 200 },
+  { sauceCount: 11, fallSpeed: 250 },
+];
 
 export function saucesForLevel(level: number): string[] {
-  return SAUCES.slice(0, LEVEL_SAUCE_COUNTS[level]);
+  return SAUCES.slice(0, LEVELS[level].sauceCount);
 }
