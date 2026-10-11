@@ -1,0 +1,16 @@
+import Phaser from 'phaser';
+
+export class BootScene extends Phaser.Scene {
+  constructor() {
+    super('Boot');
+  }
+
+  preload() {
+    // Load assets from public/assets here, e.g.:
+    // this.load.image('player', 'assets/player.png');
+  }
+
+  create() {
+    this.scene.start('Game');
+  }
+}
