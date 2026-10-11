@@ -7,8 +7,8 @@ const FLASH_DURATION_MS = 300;
 const SCORE_BAR_HEIGHT = 120;
 const SCORE_BAR_DEPTH = 100;
 const TOP_BAR_HEIGHT = 100;
-const STARTING_LIVES = 3;
-const LEVEL_DURATION_MS = 60_000;
+export const STARTING_LIVES = 3;
+export const LEVEL_DURATION_MS = 60_000;
 // Relative chance of a sauce being picked to fall, depending on whether it has been clicked.
 const UNCLICKED_WEIGHT = 2;
 const CLICKED_WEIGHT = 1;

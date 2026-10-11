@@ -42,8 +42,7 @@ export class ResultScene extends Phaser.Scene {
     let prompt = 'Smelltu til að spila aftur';
     let next: GameData = { level: 0 };
     if (!won) {
-      prompt = 'Smelltu til að reyna aftur';
-      next = { level };
+      prompt = 'Smelltu til að byrja upp á nýtt';
     } else if (hasNextLevel) {
       prompt = 'Smelltu til að halda áfram';
       next = { level: level + 1 };
