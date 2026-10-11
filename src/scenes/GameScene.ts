@@ -9,6 +9,9 @@ const SCORE_BAR_DEPTH = 100;
 const TOP_BAR_HEIGHT = 100;
 const STARTING_LIVES = 3;
 const LEVEL_DURATION_MS = 60_000;
+// Relative chance of a sauce being picked to fall, depending on whether it has been clicked.
+const UNCLICKED_WEIGHT = 2;
+const CLICKED_WEIGHT = 1;
 
 type FallingSauce = { text: Phaser.GameObjects.Text };
 type CircleState = 'empty' | 'filled' | 'crossed';
@@ -80,7 +83,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private spawnSauce() {
-    const name = Phaser.Utils.Array.GetRandom(this.levelSauces);
+    const name = this.pickSauceToSpawn();
     const text = this.add
       .text(0, 0, name, { fontSize: '44px', fontStyle: 'bold', color: '#ffcc00' })
       .setOrigin(0.5, 1);
@@ -94,6 +97,21 @@ export class GameScene extends Phaser.Scene {
 
     text.setInteractive({ useHandCursor: true });
     text.on('pointerdown', () => this.catchSauce(sauce));
+  }
+
+  private pickSauceToSpawn(): string {
+    const weights = this.circleStates.map((state) =>
+      state === 'empty' ? UNCLICKED_WEIGHT : CLICKED_WEIGHT,
+    );
+    const total = weights.reduce((sum, w) => sum + w, 0);
+    let roll = Math.random() * total;
+    for (let i = 0; i < weights.length; i++) {
+      roll -= weights[i];
+      if (roll < 0) {
+        return this.levelSauces[i];
+      }
+    }
+    return this.levelSauces[this.levelSauces.length - 1];
   }
 
   private catchSauce(sauce: FallingSauce) {
