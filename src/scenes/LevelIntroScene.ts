@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { saucesForLevel } from '../levels';
+import { pickSaucesForLevel } from '../levels';
 import type { GameData } from './GameScene';
 
 const TITLE_DELAY_MS = 500;
@@ -18,7 +18,7 @@ export class LevelIntroScene extends Phaser.Scene {
 
   create({ level = 0 }: GameData = {}) {
     const { width } = this.scale;
-    const sauces = saucesForLevel(level);
+    const sauces = pickSaucesForLevel(level);
 
     this.time.delayedCall(TITLE_DELAY_MS, () => {
       this.add
@@ -45,7 +45,7 @@ export class LevelIntroScene extends Phaser.Scene {
 
     const lastSauceAt = firstSauceAt + (sauces.length - 1) * SAUCE_INTERVAL_MS;
     this.time.delayedCall(lastSauceAt + START_DELAY_MS, () => {
-      this.scene.start('Game', { level });
+      this.scene.start('Game', { level, sauces });
     });
   }
 }

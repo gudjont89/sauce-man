@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { LEVELS, saucesForLevel } from '../levels';
+import { LEVELS, pickSaucesForLevel } from '../levels';
 
 const SPAWN_INTERVAL_MS = 1200;
 const FLASH_DURATION_MS = 300;
@@ -11,7 +11,7 @@ const LEVEL_DURATION_MS = 60_000;
 
 type FallingSauce = { text: Phaser.GameObjects.Text };
 type CircleState = 'empty' | 'filled' | 'crossed';
-export type GameData = { level?: number };
+export type GameData = { level?: number; sauces?: string[] };
 export type Outcome = 'complete' | 'timeUp' | 'outOfLives';
 
 export class GameScene extends Phaser.Scene {
@@ -30,9 +30,9 @@ export class GameScene extends Phaser.Scene {
     super('Game');
   }
 
-  create({ level = 0 }: GameData = {}) {
+  create({ level = 0, sauces }: GameData = {}) {
     this.level = level;
-    this.levelSauces = saucesForLevel(level);
+    this.levelSauces = sauces ?? pickSaucesForLevel(level);
     this.sauces = [];
     this.circleStates = this.levelSauces.map(() => 'empty');
     this.finished = false;
