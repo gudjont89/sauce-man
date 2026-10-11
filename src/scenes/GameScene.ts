@@ -1,22 +1,5 @@
 import Phaser from 'phaser';
-
-const SAUCES = [
-  'Tómatsósa',
-  'Hamborgarasósa',
-  'Pítusósa',
-  'Majónes',
-  'Pizzusósa',
-  'Trufflumajó',
-  'Tabasco-sósa',
-  'Sinnep',
-  'BBQ-sósa',
-  'Sriracha-sósa',
-  'Satay-sósa'
-  
-];
-
-// Number of sauces (taken from the start of SAUCES) in each level.
-const LEVEL_SAUCE_COUNTS = [8, 11];
+import { LEVEL_SAUCE_COUNTS, saucesForLevel } from '../levels';
 
 const SPAWN_INTERVAL_MS = 1200;
 const FALL_SPEED_MIN = 220;
@@ -51,7 +34,7 @@ export class GameScene extends Phaser.Scene {
 
   create({ level = 0 }: GameData = {}) {
     this.level = level;
-    this.levelSauces = SAUCES.slice(0, LEVEL_SAUCE_COUNTS[level]);
+    this.levelSauces = saucesForLevel(level);
     this.sauces = [];
     this.circleStates = this.levelSauces.map(() => 'empty');
     this.finished = false;

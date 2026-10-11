@@ -56,6 +56,6 @@ export class ResultScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    this.input.once('pointerdown', () => this.scene.start('Game', next));
+    this.input.once('pointerdown', () => this.scene.start('LevelIntro', next));
   }
 }
