@@ -135,7 +135,8 @@ export class GameScene extends Phaser.Scene {
 
   private endLevel(outcome: Outcome) {
     this.finished = true;
-    const score = this.circleStates.filter((s) => s === 'filled').length;
+    // A sauce earns its point on the first click; a later cross doesn't take it away.
+    const score = this.circleStates.filter((s) => s !== 'empty').length;
     this.time.delayedCall(FLASH_DURATION_MS, () => {
       this.scene.start('Result', {
         outcome,
