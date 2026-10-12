@@ -12,6 +12,10 @@ export const LEVEL_DURATION_MS = 60_000;
 // Relative chance of a sauce being picked to fall, depending on whether it has been clicked.
 const UNCLICKED_WEIGHT = 2;
 const CLICKED_WEIGHT = 1;
+// At least every 4th spawned sauce must be an unclicked one.
+const MAX_SPAWNS_WITHOUT_UNCLICKED = 3;
+// Any run of this many successive spawns must contain no repeats.
+const UNIQUE_WINDOW = 3;
 
 type FallingSauce = { text: Phaser.GameObjects.Text };
 type CircleState = 'empty' | 'filled' | 'crossed';
@@ -25,6 +29,8 @@ export class GameScene extends Phaser.Scene {
   private finished = false;
   private level = 0;
   private levelSauces: string[] = [];
+  private recentSauces: string[] = [];
+  private spawnsSinceUnclicked = 0;
   private lives = STARTING_LIVES;
   private remainingMs = LEVEL_DURATION_MS;
   private livesDisplay!: Phaser.GameObjects.Graphics;
@@ -38,6 +44,8 @@ export class GameScene extends Phaser.Scene {
     this.level = level;
     this.levelSauces = sauces ?? pickSaucesForLevel(level);
     this.sauces = [];
+    this.recentSauces = [];
+    this.spawnsSinceUnclicked = 0;
     this.circleStates = this.levelSauces.map(() => 'empty');
     this.finished = false;
     this.lives = STARTING_LIVES;
@@ -100,18 +108,35 @@ export class GameScene extends Phaser.Scene {
   }
 
   private pickSauceToSpawn(): string {
-    const weights = this.circleStates.map((state) =>
-      state === 'empty' ? UNCLICKED_WEIGHT : CLICKED_WEIGHT,
+    const mustBeUnclicked = this.spawnsSinceUnclicked >= MAX_SPAWNS_WITHOUT_UNCLICKED;
+    const all = this.levelSauces.map((_, i) => i);
+    const fresh = all.filter((i) => !this.recentSauces.includes(this.levelSauces[i]));
+    const unclicked = fresh.filter((i) => this.circleStates[i] === 'empty');
+
+    // Uniqueness wins over the unclicked rule if the two can't both be met (e.g. fewer than 3 sauces).
+    const candidates =
+      mustBeUnclicked && unclicked.length > 0 ? unclicked : fresh.length > 0 ? fresh : all;
+
+    const weights = candidates.map((i) =>
+      this.circleStates[i] === 'empty' ? UNCLICKED_WEIGHT : CLICKED_WEIGHT,
     );
     const total = weights.reduce((sum, w) => sum + w, 0);
     let roll = Math.random() * total;
-    for (let i = 0; i < weights.length; i++) {
+    let picked = candidates[candidates.length - 1];
+    for (let i = 0; i < candidates.length; i++) {
       roll -= weights[i];
       if (roll < 0) {
-        return this.levelSauces[i];
+        picked = candidates[i];
+        break;
       }
     }
-    return this.levelSauces[this.levelSauces.length - 1];
+
+    this.spawnsSinceUnclicked = this.circleStates[picked] === 'empty' ? 0 : this.spawnsSinceUnclicked + 1;
+    this.recentSauces.push(this.levelSauces[picked]);
+    if (this.recentSauces.length > UNIQUE_WINDOW - 1) {
+      this.recentSauces.shift();
+    }
+    return this.levelSauces[picked];
   }
 
   private catchSauce(sauce: FallingSauce) {
