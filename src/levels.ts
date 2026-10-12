@@ -11,8 +11,24 @@ export const SAUCES = [
   'Sinnep',
   'BBQ-sósa',
   'Sriracha-sósa',
-  'Satay-sósa'
-  
+  'Satay-sósa',
+  'Kokteilsósa',
+  'Bearnaise-sósa',
+  'Sojasósa',
+  'Tzatziki-sósa',
+  'Worcestershire-sósa',
+  'Piri piri-sósa',
+  'Hoisinsósa',
+  'Graflaxsósa',
+  'Hvítlaukssósa',
+  'Remúlaði',
+  'Black garlic sósa',
+  'Hunangssinnep',
+  'Tahini',
+  'Teriyaki-sósa',
+  'Salsa',
+  'Chilimajó',
+  'Hot sauce',
 ];
 
 type Level = {
