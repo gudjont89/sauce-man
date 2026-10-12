@@ -1,12 +1,11 @@
 import Phaser from 'phaser';
-import type { GameData, Outcome } from './GameScene';
+import type { Outcome } from './GameScene';
 
 type ResultData = {
   outcome: Outcome;
   score: number;
   total: number;
   level: number;
-  hasNextLevel: boolean;
 };
 
 const HEADLINES: Record<Outcome, string> = {
@@ -20,7 +19,7 @@ export class ResultScene extends Phaser.Scene {
     super('Result');
   }
 
-  create({ outcome, score, total, level, hasNextLevel }: ResultData) {
+  create({ outcome, score, total, level }: ResultData) {
     const { width, height } = this.scale;
     const won = outcome === 'complete';
 
@@ -39,14 +38,7 @@ export class ResultScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    let prompt = 'Smelltu til að spila aftur';
-    let next: GameData = { level: 0 };
-    if (!won) {
-      prompt = 'Smelltu til að byrja upp á nýtt';
-    } else if (hasNextLevel) {
-      prompt = 'Smelltu til að halda áfram';
-      next = { level: level + 1 };
-    }
+    const prompt = won ? 'Smelltu til að spila aftur' : 'Smelltu til að byrja upp á nýtt';
 
     this.add
       .text(width / 2, height / 2 + 80, prompt, {
@@ -55,6 +47,6 @@ export class ResultScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    this.input.once('pointerdown', () => this.scene.start('LevelIntro', next));
+    this.input.once('pointerdown', () => this.scene.start('LevelIntro', { level: 0 }));
   }
 }

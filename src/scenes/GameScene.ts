@@ -140,13 +140,17 @@ export class GameScene extends Phaser.Scene {
     this.finished = true;
     // A sauce earns its point on the first click; a later cross doesn't take it away.
     const score = this.circleStates.filter((s) => s !== 'empty').length;
+    const hasNextLevel = this.level + 1 < LEVELS.length;
     this.time.delayedCall(FLASH_DURATION_MS, () => {
+      if (outcome === 'complete' && hasNextLevel) {
+        this.scene.start('LevelIntro', { level: this.level + 1 });
+        return;
+      }
       this.scene.start('Result', {
         outcome,
         score,
         total: this.levelSauces.length,
         level: this.level,
-        hasNextLevel: this.level + 1 < LEVELS.length,
       });
     });
   }
