@@ -1,48 +1,53 @@
 import Phaser from 'phaser';
 
-export const SAUCES = [
+const LEVEL_1_SAUCES = [
   'Tómatsósa',
   'Hamborgarasósa',
   'Pítusósa',
   'Majónes',
+  'Kokteilsósa',
+  'BBQ-sósa',
   'Pizzusósa',
-  'Trufflumajó',
+];
+
+const LEVEL_2_SAUCES = [
   'Tabasco-sósa',
   'Sinnep',
-  'BBQ-sósa',
+  'Salsa',
+  'Remúlaði',
   'Sriracha-sósa',
-  'Satay-sósa',
-  'Kokteilsósa',
   'Bearnaise-sósa',
   'Sojasósa',
-  'Tzatziki-sósa',
   'Worcestershire-sósa',
   'Piri piri-sósa',
-  'Hoisinsósa',
-  'Graflaxsósa',
+];
+
+const LEVEL_3_SAUCES = [
   'Hvítlaukssósa',
-  'Remúlaði',
   'Black garlic sósa',
   'Hunangssinnep',
   'Tahini',
   'Teriyaki-sósa',
-  'Salsa',
+  'Tzatziki-sósa',
   'Chilimajó',
-  'Hot sauce',
+  'Trufflumajó',
+  'Satay-sósa',
+  'Hoisinsósa',
+  'Graflaxsósa',
 ];
 
 type Level = {
-  sauceCount: number; // picked at random from SAUCES
+  sauces: string[]; // every sauce in the array is used in the level
   fallSpeed: number; // pixels per second
 };
 
 export const LEVELS: Level[] = [
-  { sauceCount: 7, fallSpeed: 200 },
-  { sauceCount: 9, fallSpeed: 225 },
-  { sauceCount: 11, fallSpeed: 250 },
+  { sauces: LEVEL_1_SAUCES, fallSpeed: 200 },
+  { sauces: LEVEL_2_SAUCES, fallSpeed: 225 },
+  { sauces: LEVEL_3_SAUCES, fallSpeed: 250 },
 ];
 
-// Returns a new random selection, in random order, each time it's called.
+// Returns the level's sauces in a new random order each time it's called.
 export function pickSaucesForLevel(level: number): string[] {
-  return Phaser.Utils.Array.Shuffle([...SAUCES]).slice(0, LEVELS[level].sauceCount);
+  return Phaser.Utils.Array.Shuffle([...LEVELS[level].sauces]);
 }
