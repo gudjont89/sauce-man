@@ -1,14 +1,22 @@
 import Phaser from 'phaser';
 import { SAUCE_SOUNDS, sauceSoundKey } from '../sounds';
-import { LEVEL_DURATION_MS, STARTING_LIVES } from './GameScene';
 
-const RULES = [
-  'Sósunöfn falla niður skjáinn.',
-  'Smelltu á hverja sósu einu sinni til að fylla hringinn hennar.',
-  'Ef þú smellir aftur á sósu sem þú hefur þegar náð missir þú líf.',
-  `Þú hefur ${STARTING_LIVES} líf og ${LEVEL_DURATION_MS / 1000} sekúndur í hverju borði.`,
-  'Náðu öllum sósunum til að komast á næsta borð.',
-  'Ef þú tapar byrjar þú aftur á 1. borði.',
+const LINE_DELAY_MS = 1000;
+
+const PAGES = [
+  [
+    'Veturinn 2015 til 2016 drýgði Jóhann Alfreð Kristinsson sannkallaða hetjudáð, þegar hann mætti vikulega í Þjóðleikhúskjallarann til þess að telja upp sósur.',
+    'Markmið hans var göfugt: að telja upp allar sósur sem notaðar eru í íslenskum eldhúsum.',
+    'Því miður lést Jóhann Alfreð á sviðinu föstudagskvöldið 27. mars árið 2017, áður en verkið var fullunnið.',
+  ],
+  [
+    'Þessi leikur er tileinkaður minningu Jóhanns Alfreðs.',
+    'Getur þú lokið verkefni hans og talið upp allar sósur á Íslandi fyrir framan stappfullan og æstan Þjóðleikhúskjallara?',
+  ],
+  [
+    'Verkefni þitt er einfalt en erfitt: teldu upp allar sósurnar, en aðeins einu sinni hverja',
+    'Fleiri sósur bætast við í hverju borði',
+  ],
 ];
 
 export class BootScene extends Phaser.Scene {
@@ -31,20 +39,56 @@ export class BootScene extends Phaser.Scene {
       .text(width / 2, 160, 'Sauce Man', { fontSize: '80px', fontStyle: 'bold', color: '#ffcc00' })
       .setOrigin(0.5);
 
-    this.add
-      .text(width / 2, 300, 'Reglur', { fontSize: '52px', fontStyle: 'bold', color: '#ffffff' })
-      .setOrigin(0.5, 0);
-
-    this.add.text(60, 400, RULES.map((rule) => `•  ${rule}`).join('\n\n'), {
-      fontSize: '32px',
+    const body = this.add.text(60, 320, '', {
+      fontSize: '36px',
       color: '#ffffff',
       wordWrap: { width: width - 120 },
     });
 
-    this.add
-      .text(width / 2, height - 160, 'Smelltu til að byrja', { fontSize: '44px', color: '#ffcc00' })
-      .setOrigin(0.5);
+    const prompt = this.add
+      .text(width / 2, height - 160, '', { fontSize: '44px', color: '#ffcc00' })
+      .setOrigin(0.5)
+      .setVisible(false);
 
-    this.input.once('pointerdown', () => this.scene.start('LevelIntro'));
+    let page = 0;
+    let shownLines = 0;
+    let lineTimer: Phaser.Time.TimerEvent | undefined;
+
+    const render = () => {
+      body.setText(PAGES[page].slice(0, shownLines).join('\n\n'));
+      if (shownLines === PAGES[page].length) {
+        lineTimer?.remove();
+        prompt.setText(page === PAGES.length - 1 ? 'Smelltu til að byrja' : 'Smelltu til að halda áfram');
+        prompt.setVisible(true);
+      }
+    };
+
+    const startPage = () => {
+      prompt.setVisible(false);
+      shownLines = 1;
+      render();
+      lineTimer = this.time.addEvent({
+        delay: LINE_DELAY_MS,
+        repeat: PAGES[page].length - 2,
+        callback: () => {
+          shownLines++;
+          render();
+        },
+      });
+    };
+
+    this.input.on('pointerdown', () => {
+      if (shownLines < PAGES[page].length) {
+        shownLines = PAGES[page].length;
+        render();
+      } else if (page < PAGES.length - 1) {
+        page++;
+        startPage();
+      } else {
+        this.scene.start('LevelIntro');
+      }
+    });
+
+    startPage();
   }
 }
