@@ -14,7 +14,7 @@ const PAGES = [
     'Getur þú lokið verkefni hans og talið upp allar sósur á Íslandi fyrir framan stappfullan og æstan Þjóðleikhúskjallara?',
   ],
   [
-    'Verkefni þitt er einfalt en erfitt: teldu upp allar sósurnar, en aðeins einu sinni hverja',
+    'Verkefni þitt er einfalt: teldu upp allar sósurnar, en þú mátt aðeins nefna hverjar þeirra einu sinni',
     'Fleiri sósur bætast við í hverju borði',
   ],
 ];
