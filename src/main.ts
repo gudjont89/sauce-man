@@ -1,4 +1,6 @@
+import '@fontsource/vt323/latin-400.css';
 import Phaser from 'phaser';
+import { FONT_FAMILY } from './font';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
 import { LevelIntroScene } from './scenes/LevelIntroScene';
@@ -23,4 +25,8 @@ const config: Phaser.Types.Core.GameConfig = {
   scene: [BootScene, LevelIntroScene, GameScene, ResultScene],
 };
 
-export default new Phaser.Game(config);
+// Canvas text can't wait on font-display, so make sure VT323 is ready first.
+export default document.fonts
+  .load(`16px ${FONT_FAMILY}`)
+  .catch(() => undefined)
+  .then(() => new Phaser.Game(config));

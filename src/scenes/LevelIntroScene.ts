@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { FONT_FAMILY } from '../font';
 import { pickSaucesForLevel } from '../levels';
 import type { GameData } from './GameScene';
 
@@ -23,7 +24,7 @@ export class LevelIntroScene extends Phaser.Scene {
     this.time.delayedCall(TITLE_DELAY_MS, () => {
       this.add
         .text(width / 2, TITLE_Y, `${level + 1}. borð`, {
-          fontSize: '80px',
+          fontFamily: FONT_FAMILY, fontSize: '80px',
           fontStyle: 'bold',
           color: '#ffffff',
         })
@@ -35,7 +36,7 @@ export class LevelIntroScene extends Phaser.Scene {
       this.time.delayedCall(firstSauceAt + i * SAUCE_INTERVAL_MS, () => {
         this.add
           .text(width / 2, LIST_TOP + i * LIST_SPACING, name, {
-            fontSize: '44px',
+            fontFamily: FONT_FAMILY, fontSize: '44px',
             fontStyle: 'bold',
             color: '#ffcc00',
           })

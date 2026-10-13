@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { FONT_FAMILY } from '../font';
 import type { Outcome } from './GameScene';
 
 type ResultData = {
@@ -25,14 +26,14 @@ export class ResultScene extends Phaser.Scene {
 
     this.add
       .text(width / 2, height / 2 - 200, HEADLINES[outcome].replace('{level}', `${level + 1}`), {
-        fontSize: '48px',
+        fontFamily: FONT_FAMILY, fontSize: '48px',
         color: won ? '#ffffff' : '#ff3333',
       })
       .setOrigin(0.5);
 
     this.add
       .text(width / 2, height / 2 - 80, `${score} / ${total}`, {
-        fontSize: '140px',
+        fontFamily: FONT_FAMILY, fontSize: '140px',
         fontStyle: 'bold',
         color: '#ffcc00',
       })
@@ -42,7 +43,7 @@ export class ResultScene extends Phaser.Scene {
 
     this.add
       .text(width / 2, height / 2 + 80, prompt, {
-        fontSize: '36px',
+        fontFamily: FONT_FAMILY, fontSize: '36px',
         color: '#ffffff',
       })
       .setOrigin(0.5);

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { FONT_FAMILY } from '../font';
 import { LEVELS, pickSaucesForLevel } from '../levels';
 import { SauceSpawner } from '../sauceSpawner';
 import { sauceSoundKey } from '../sounds';
@@ -85,7 +86,7 @@ export class GameScene extends Phaser.Scene {
   private spawnSauce() {
     const name = this.spawner.next(this.circleStates.map((state) => state === 'empty'));
     const text = this.add
-      .text(0, 0, name, { fontSize: '44px', fontStyle: 'bold', color: '#ffcc00' })
+      .text(0, 0, name, { fontFamily: FONT_FAMILY, fontSize: '44px', fontStyle: 'bold', color: '#ffcc00' })
       .setOrigin(0.5, 1);
     text.y = TOP_BAR_HEIGHT;
 
@@ -168,7 +169,7 @@ export class GameScene extends Phaser.Scene {
     this.livesDisplay = this.add.graphics().setDepth(SCORE_BAR_DEPTH);
     this.drawLives();
     this.timerText = this.add
-      .text(width - 30, TOP_BAR_HEIGHT / 2, '', { fontSize: '44px', fontStyle: 'bold', color: '#ffffff' })
+      .text(width - 30, TOP_BAR_HEIGHT / 2, '', { fontFamily: FONT_FAMILY, fontSize: '44px', fontStyle: 'bold', color: '#ffffff' })
       .setOrigin(1, 0.5)
       .setDepth(SCORE_BAR_DEPTH);
   }
@@ -234,7 +235,7 @@ export class GameScene extends Phaser.Scene {
       .setOrigin(0)
       .setDepth(1000);
     const label = this.add
-      .text(width / 2, height / 2, name, { fontSize: '120px', fontStyle: 'bold', color: '#000000' })
+      .text(width / 2, height / 2, name, { fontFamily: FONT_FAMILY, fontSize: '120px', fontStyle: 'bold', color: '#000000' })
       .setOrigin(0.5)
       .setDepth(1001);
 

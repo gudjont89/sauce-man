@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { FONT_FAMILY } from '../font';
 import { SAUCE_SOUNDS, sauceSoundKey } from '../sounds';
 
 const LINE_DELAY_MS = 1000;
@@ -36,17 +37,17 @@ export class BootScene extends Phaser.Scene {
     const { width, height } = this.scale;
 
     this.add
-      .text(width / 2, 160, 'Sauce Man', { fontSize: '80px', fontStyle: 'bold', color: '#ffcc00' })
+      .text(width / 2, 160, 'Sauce Man', { fontFamily: FONT_FAMILY, fontSize: '80px', fontStyle: 'bold', color: '#ffcc00' })
       .setOrigin(0.5);
 
     const body = this.add.text(60, 320, '', {
-      fontSize: '36px',
+      fontFamily: FONT_FAMILY, fontSize: '36px',
       color: '#ffffff',
       wordWrap: { width: width - 120 },
     });
 
     const prompt = this.add
-      .text(width / 2, height - 160, '', { fontSize: '44px', color: '#ffcc00' })
+      .text(width / 2, height - 160, '', { fontFamily: FONT_FAMILY, fontSize: '44px', color: '#ffcc00' })
       .setOrigin(0.5)
       .setVisible(false);
 
